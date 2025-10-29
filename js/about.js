@@ -11,7 +11,8 @@ function parseTweets(runkeeper_tweets) {
 	
 	//This line modifies the DOM, searching for the tag with the numberTweets ID and updating the text.
 	//It works correctly, your task is to update the text of the other tags in the HTML file!
-	document.getElementById('numberTweets').innerText = tweet_array.length;	
+	const tweetsLength = tweet_array.length;
+	document.getElementById('numberTweets').innerText = tweetsLength;
 
 	// Find the min and max dates of the tweets
 	const minDate = new Date(
@@ -44,18 +45,40 @@ function parseTweets(runkeeper_tweets) {
 		return acc;
 	}, {});
 
-	// Set the count text in the respective category html tags
+	// Store the percentages of each category in an object
+	const percentages = Object.entries(counts).reduce((acc, [category, count]) => {
+		const percentage = 100 * count / tweetsLength;
+		acc[category] = percentage.toFixed(2);
+		return acc;
+	}, {});
+
+	// Set the count and percentage text in the respective category html tags
 	Array.from(document.getElementsByClassName('completedEvents')).forEach((elem) => {
 		elem.innerText = counts['completed_event'] || 0;
 	});
+	Array.from(document.getElementsByClassName('completedEventsPct')).forEach((elem) => {
+		elem.innerText = (percentages['completed_event'] || 0) + "%";
+	});
+
 	Array.from(document.getElementsByClassName('liveEvents')).forEach((elem) => {
 		elem.innerText = counts['live_event'] || 0;
 	});
+	Array.from(document.getElementsByClassName('liveEventsPct')).forEach((elem) => {
+		elem.innerText = (percentages['live_event'] || 0) + "%";
+	});
+
 	Array.from(document.getElementsByClassName('achievements')).forEach((elem) => {
 		elem.innerText = counts['achievement'] || 0;
 	});
+	Array.from(document.getElementsByClassName('achievementsPct')).forEach((elem) => {
+		elem.innerText = (percentages['achievement'] || 0) + "%";
+	});
+
 	Array.from(document.getElementsByClassName('miscellaneous')).forEach((elem) => {
 		elem.innerText = counts['miscellaneous'] || 0;
+	});
+	Array.from(document.getElementsByClassName('miscellaneousPct')).forEach((elem) => {
+		elem.innerText = (percentages['miscellaneous'] || 0) + "%";
 	});
 }
 
