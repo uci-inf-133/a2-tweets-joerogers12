@@ -10,7 +10,25 @@ class Tweet {
 	//returns either 'live_event', 'achievement', 'completed_event', or 'miscellaneous'
     get source():string {
         //TODO: identify whether the source is a live event, an achievement, a completed event, or miscellaneous.
-        return "unknown";
+        // Define lowercase standard for tweet text
+        const tweet = this.text.toLowerCase();
+        
+        // live_event, the text contains 'right now'
+        if (tweet.includes("right now")) {
+            return "live_event";
+        }
+        // achievement, the text contains 'achieved' or 'goal'
+        else if (tweet.includes("achievement") || tweet.includes("goal")) {
+            return "achievement";
+        }
+        // completed_event, the text starts with 'just'
+        else if (tweet.startsWith("just")) {
+            return "live_event";
+        }
+        // everything else is miscellaneous
+        else {
+            return "miscellaneous";
+        }
     }
 
     //returns a boolean, whether the text includes any content written by the person tweeting.
