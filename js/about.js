@@ -19,7 +19,7 @@ function parseTweets(runkeeper_tweets) {
 			return new Date(tweet.created_at);
 		}))
 	);
-	let maxDate = new Date(
+	const maxDate = new Date(
 		Math.max(...runkeeper_tweets.map((tweet) => {
 			return new Date(tweet.created_at);
 		}))
@@ -36,6 +36,18 @@ function parseTweets(runkeeper_tweets) {
 	// Set the text in the proper html tags of the DOM
 	document.getElementById('firstDate').innerText = minDate.toLocaleDateString("en-US", dateFormat);
 	document.getElementById('lastDate').innerText = maxDate.toLocaleDateString("en-US", dateFormat);
+
+	// Store the counts of each category in an object
+	const counts = tweet_array.reduce((acc, tweet) => {
+		const category = tweet.source;
+		acc[category] = (acc[category] || 0) + 1;
+		return acc;
+	}, {});
+
+	// Set the text in the respective category html tags
+	Array.from(document.getElementsByClassName('completedEvents')).forEach((elem) => {
+		elem.innerText = counts['completed_event'] || 0;
+	});
 }
 
 //Wait for the DOM to load

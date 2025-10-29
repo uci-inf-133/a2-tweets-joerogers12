@@ -23,7 +23,7 @@ class Tweet {
         }
         // completed_event, the text starts with 'just'
         else if (tweet.startsWith("just")) {
-            return "live_event";
+            return "completed_event";
         }
         // everything else is miscellaneous
         else {
