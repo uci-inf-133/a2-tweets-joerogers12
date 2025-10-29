@@ -9,7 +9,7 @@ class Tweet {
 
 	//returns either 'live_event', 'achievement', 'completed_event', or 'miscellaneous'
     get source():string {
-        //TODO: identify whether the source is a live event, an achievement, a completed event, or miscellaneous.
+        // identify whether the source is a live event, an achievement, a completed event, or miscellaneous.
         // Define lowercase standard for tweet text
         const tweet = this.text.toLowerCase();
         
@@ -33,7 +33,7 @@ class Tweet {
 
     //returns a boolean, whether the text includes any content written by the person tweeting.
     get written():boolean {
-        //TODO: identify whether the tweet is written
+        // identify whether the tweet is written
         if (this.text.includes(" - ")) {
             return true;
         }
@@ -43,11 +43,29 @@ class Tweet {
     }
 
     get writtenText():string {
+        const tweet = this.text;
+        
         if(!this.written) {
             return "";
         }
-        //TODO: parse the written text from the tweet
-        return "";
+
+        // parse the written text from the tweet
+        let i = 0;
+
+        // Go to beginning of written text after ' - '
+        while (tweet[i] != "-") {
+            ++i;
+        }
+        i = i + 2;
+
+        // Save written portion, until url starting with " ht"
+        let writtenPortion:string = "";
+        while (tweet[i] != " " && tweet[i + 1] != "h" && tweet[i + 2] != "t") {
+            writtenPortion += tweet[i];
+            ++i;
+        }
+        
+        return writtenPortion;
     }
 
     get activityType():string {
