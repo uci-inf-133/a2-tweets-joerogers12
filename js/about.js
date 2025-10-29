@@ -44,9 +44,18 @@ function parseTweets(runkeeper_tweets) {
 		return acc;
 	}, {});
 
-	// Set the text in the respective category html tags
+	// Set the count text in the respective category html tags
 	Array.from(document.getElementsByClassName('completedEvents')).forEach((elem) => {
 		elem.innerText = counts['completed_event'] || 0;
+	});
+	Array.from(document.getElementsByClassName('liveEvents')).forEach((elem) => {
+		elem.innerText = counts['live_event'] || 0;
+	});
+	Array.from(document.getElementsByClassName('achievements')).forEach((elem) => {
+		elem.innerText = counts['achievement'] || 0;
+	});
+	Array.from(document.getElementsByClassName('miscellaneous')).forEach((elem) => {
+		elem.innerText = counts['miscellaneous'] || 0;
 	});
 }
 
