@@ -25,8 +25,17 @@ function parseTweets(runkeeper_tweets) {
 		}))
 	);
 
-	document.getElementById('firstDate').innerText = minDate.toLocaleDateString();
-	document.getElementById('lastDate').innerText = maxDate.toLocaleDateString();
+	// Formats the display of the date
+	const dateFormat = {
+		weekday: "long",
+		year: "numeric",
+		month: "long",  
+		day: "numeric",
+	};
+
+	// Set the text in the proper html tags of the DOM
+	document.getElementById('firstDate').innerText = minDate.toLocaleDateString("en-US", dateFormat);
+	document.getElementById('lastDate').innerText = maxDate.toLocaleDateString("en-US", dateFormat);
 }
 
 //Wait for the DOM to load
