@@ -80,6 +80,24 @@ function parseTweets(runkeeper_tweets) {
 	Array.from(document.getElementsByClassName('miscellaneousPct')).forEach((elem) => {
 		elem.innerText = (percentages['miscellaneous'] || 0) + "%";
 	});
+
+	// Get the count and percentage of written texts
+	const writtenCount = tweet_array.reduce((acc, tweet) => {
+		if (tweet.written) {
+			acc++;
+		}
+		return acc;
+	}, 0);
+
+	const writtenPercentage = (100 * writtenCount / tweetsLength).toFixed(2);
+
+	// Set the count and percentage for the written text
+	Array.from(document.getElementsByClassName('written')).forEach((elem) => {
+		elem.innerText = writtenCount;
+	});
+	Array.from(document.getElementsByClassName('writtenPct')).forEach((elem) => {
+		elem.innerText = writtenPercentage + "%";
+	});
 }
 
 //Wait for the DOM to load
