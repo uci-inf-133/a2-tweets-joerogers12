@@ -49,23 +49,13 @@ class Tweet {
             return "";
         }
 
-        // parse the written text from the tweet
-        let i = 0;
+        // split at " - "
+        const parts = this.text.split(" - ");
+        if (parts.length < 2) return "";
 
-        // Go to beginning of written text after ' - '
-        while (tweet[i] !== "-") {
-            ++i;
-        }
-        i = i + 2;
-
-        // Save written portion, until url starting with " ht"
-        let writtenPortion:string = "";
-        while (tweet[i] !== " " && tweet[i + 1] !== "h" && tweet[i + 2] !== "t") {
-            writtenPortion += tweet[i];
-            ++i;
-        }
-        
-        return writtenPortion;
+        // Remove URL if present
+        let textPart = parts[1].split(" http")[0];
+        return textPart.trim();
     }
 
     get activityType():string {
@@ -102,7 +92,21 @@ class Tweet {
     }
 
     getHTMLTableRow(rowNumber:number):string {
-        //TODO: return a table row which summarizes the tweet with a clickable link to the RunKeeper activity
-        return "<tr></tr>";
+        // return a table row which summarizes the tweet with a clickable link to the RunKeeper activity
+        // Define the activity and written text of the tweet
+        let activity = this.activityType;
+        let text = this.writtenText;
+
+        // Extract the URL if present
+        const linkMatch = this.text.match(/http\S+/);
+        const link = linkMatch ? linkMatch[0] : "#";
+
+        return `
+            <tr>
+                <th scope="row">${rowNumber}</th>
+                <td>${activity}</td>
+                <td>${text} <a href="${link}" target="_blank">${link}</a></td>
+            </tr>
+        `;
     }
 }
