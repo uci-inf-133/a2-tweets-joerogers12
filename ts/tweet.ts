@@ -90,34 +90,15 @@ class Tweet {
         // Extract the distance from the text of the tweet
         const tweet = this.text;
 
-        let i = 0;
-        // Use regular expression to find first number which is the beginning of distance
-        while (!/^\d$/.test(tweet[i])) {
-            i++;
-        }
-        
-        let distance = "";
-        while (tweet[i] !== ' ') {
-            distance += tweet[i];
-            i++;
-        }
-        i++;
+        // Match a distance and its unit (km or mi)
+        const match = tweet.match(/(\d+(\.\d+)?)\s*(km|mi)/i);
+        if (!match) return 0;
 
-        // Get units, km or mi
-        let units = "";
-        while (tweet[i] !== ' ') {
-            units += tweet[i];
-            i++;
-        }
-
-        const distanceNum:number = Number(distance);
+        const distanceNum = parseFloat(match[1]);
+        const units = match[3].toLowerCase();
 
         // Convert km to mi
-        if (units === 'km') {
-            return distanceNum / 1.609;
-        }
-
-        return distanceNum;
+        return units === 'km' ? distanceNum / 1.609 : distanceNum;
     }
 
     getHTMLTableRow(rowNumber:number):string {
