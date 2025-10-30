@@ -18,8 +18,20 @@ function parseTweets(runkeeper_tweets) {
 			activityCounts[type] = (activityCounts[type] || 0) + 1;
 		}
 	});
+	console.log(activityCounts); // debugging
 
-	
+	// Modify the html to display different types
+	document.getElementById("numberActivities").innerText = Object.keys(activityCounts).length;
+
+	// Find the 3 most logged activities by sorting it as an array and taking top 3
+	const entries = Object.entries(activityCounts);
+	entries.sort((a, b) => b[1] - a[1]);
+	const top3 = entries.slice(0, 3);
+
+	// Modify the html to display the top 3 activities
+	document.getElementById("firstMost").innerText = top3[0][0];
+	document.getElementById("secondMost").innerText = top3[1][0];
+	document.getElementById("thirdMost").innerText = top3[2][0];
 
 	activity_vis_spec = {
 	  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
