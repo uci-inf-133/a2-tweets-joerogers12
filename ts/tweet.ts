@@ -53,14 +53,14 @@ class Tweet {
         let i = 0;
 
         // Go to beginning of written text after ' - '
-        while (tweet[i] != "-") {
+        while (tweet[i] !== "-") {
             ++i;
         }
         i = i + 2;
 
         // Save written portion, until url starting with " ht"
         let writtenPortion:string = "";
-        while (tweet[i] != " " && tweet[i + 1] != "h" && tweet[i + 2] != "t") {
+        while (tweet[i] !== " " && tweet[i + 1] !== "h" && tweet[i + 2] !== "t") {
             writtenPortion += tweet[i];
             ++i;
         }
@@ -72,16 +72,50 @@ class Tweet {
         if (this.source != 'completed_event') {
             return "unknown";
         }
-        //TODO: parse the activity type from the text of the tweet
-        return "";
+        // parse the activity type from the text of the tweet
+        // Find the word after 'mi' or 'km'
+        const tweet = this.text;
+
+        let i = 0;
+        while (
+            (tweet[i] !== ' ' && tweet[i + 1] !== 'm' && tweet[i + 2] !== 'i' && tweet[i + 3] !== ' ')
+         || (tweet[i] !== ' ' && tweet[i + 1] !== 'k' && tweet[i + 2] !== 'm' && tweet[i + 3] !== ' ')
+        ) {
+            i++;    
+        }
+        i = i + 4;
+
+        let activity:string = "";
+
+        while (tweet[i] !== ' ') {
+            activity += tweet[i];
+            i++;
+        }
+
+        return activity;
     }
 
     get distance():number {
         if(this.source != 'completed_event') {
             return 0;
         }
-        //TODO: prase the distance from the text of the tweet
-        return 0;
+        // prase the distance from the text of the tweet
+        const tweet = this.text;
+
+        let i = 0;
+        // Use regular expression to find first number
+        while (!/^\d$/.test(tweet[i])) {
+            i++;
+        }
+        
+        let distance = "";
+
+        while (tweet[i] !== ' ') {
+            distance += tweet[i];
+            i++;
+        }
+
+        return Number(distance);
     }
 
     getHTMLTableRow(rowNumber:number):string {
