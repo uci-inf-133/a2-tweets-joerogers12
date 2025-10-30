@@ -87,6 +87,11 @@ class Tweet {
 
         let activity:string = "";
 
+        // Not a distance activity 
+        if (i > tweet.length) {
+            return "other";
+        }
+
         while (tweet[i] !== ' ') {
             activity += tweet[i];
             i++;
@@ -117,7 +122,7 @@ class Tweet {
 
         // Get units, km or mi
         let units = "";
-        while (tweet[i] !== '  ') {
+        while (tweet[i] !== ' ') {
             units += tweet[i];
             i++;
         }
