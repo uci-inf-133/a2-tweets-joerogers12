@@ -82,11 +82,13 @@ function parseTweets(runkeeper_tweets) {
 	// Modify the html to show which days had longer distances
 	document.getElementById("weekdayOrWeekendLonger").innerText = avgWeekend > avgWeekday ? "Weekends" : "Weekdays";
 
+	// Define the type and counts as a new array
 	const activityValues = Object.entries(activityCounts).map(([type, count]) => ({
     type,
     count
 	}));
 
+	// Activity counts bar graph
 	activity_vis_spec = {
 	  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
 	  description: "A graph of the number of Tweets containing each type of activity.",
@@ -104,40 +106,45 @@ function parseTweets(runkeeper_tweets) {
 
 	// create the visualizations which group the three most-tweeted activities by the day of the week.
 	// Use those visualizations to answer the questions about which activities tended to be longest and when.
+	// Get the activity data from the top 3 activities
 	const top3TweetData = tweet_array
-			.filter(tweet => top3Names.includes(tweet.activityType))
-			.map(tweet => ({
-					day: tweet.time.getDay(), // 0=Sunday, 6=Saturday
-					distance: tweet.distance,
-					type: tweet.activityType
-			}));
+		.filter(tweet => top3Names.includes(tweet.activityType))
+		.map(tweet => ({
+			day: tweet.time.toLocaleDateString("en-US", { weekday: "short" }),
+			distance: tweet.distance,
+			type: tweet.activityType
+		}));
 
+	// Raw top 3 distances
 	const top3RawSpec = {
-			$schema: "https://vega.github.io/schema/vega-lite/v5.json",
-			description: "Distances by day of the week for top 3 activities",
-			data: { values: top3TweetData },
-			mark: "point",
-			encoding: {
-					x: { field: "day", type: "ordinal", title: "Time (Day)" },
-					y: { field: "distance", type: "quantitative", title: "Distance (mi)" },
-					color: { field: "type", type: "nominal" }
-			}
+		$schema: "https://vega.github.io/schema/vega-lite/v5.json",
+		description: "Distances by day of the week for top 3 activities",
+		data: { values: top3TweetData },
+		mark: "point",
+		encoding: {
+			x: { field: "day", type: "ordinal", title: "Time (Day)", sort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] },
+			y: { field: "distance", type: "quantitative", title: "Distance (mi)" },
+			color: { field: "type", type: "nominal" }
+		}
 	};
 
+	// Mean distances of top 3 activities
 	const top3MeanSpec = {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
     description: "Distances by day of the week for top 3 activities (mean)",
     data: { values: top3TweetData },
     mark: "point",
     encoding: {
-        x: { field: "day", type: "ordinal", title: "Time (Day)" },
-        y: { field: "distance", type: "quantitative", title: "Mean of Distance", aggregate: "mean" },
-        color: { field: "type", type: "nominal" }
+			x: { field: "day", type: "ordinal", title: "Time (Day)", sort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] },
+			y: { field: "distance", type: "quantitative", title: "Mean of Distance", aggregate: "mean" },
+			color: { field: "type", type: "nominal" }
     }
 	};
 
+	// Start with raw
 	let showingMean = false;
 
+	// Handle clicking to switch between mean and raw
 	document.getElementById("aggregate").addEventListener("click", () => {
 			showingMean = !showingMean;
 			vegaEmbed("#distanceVis", showingMean ? top3MeanSpec : top3RawSpec, { actions: false });
