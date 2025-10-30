@@ -109,10 +109,21 @@ class Tweet {
         }
         
         let distance = "";
-
         while (tweet[i] !== ' ') {
             distance += tweet[i];
             i++;
+        }
+        i++;
+
+        // Get units, km or mi
+        let units = "";
+        while (tweet[i] !== '  ') {
+            units += tweet[i];
+            i++;
+        }
+
+        if (units === 'km') {
+            return Number(distance) / 1.609;
         }
 
         return Number(distance);
