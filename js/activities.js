@@ -10,15 +10,32 @@ function parseTweets(runkeeper_tweets) {
 	});
 
 	//TODO: create a new array or manipulate tweet_array to create a graph of the number of tweets containing each type of activity.
-	// Add the different activity types and their counts to an object
+	// Add the different activity types, their counts, and their average distances to objects
 	const activityCounts = {};
+	const activityDistances = {};
+
 	tweet_array.forEach(tweet => {
 		const type = tweet.activityType;
+		const distance = tweet.distance;
+		
 		if (type && type !== "unknown") {
+			// Increment count
 			activityCounts[type] = (activityCounts[type] || 0) + 1;
+
+			// Update running average
+			if (activityDistances[type] === undefined) {
+				// First entry — set directly
+				activityDistances[type] = distance;
+			} else {
+				// Running average formula
+				const count = activityCounts[type];
+				const prevAvg = activityDistances[type];
+				activityDistances[type] = ((prevAvg * (count - 1)) + distance) / count;
+			}
 		}
 	});
 	console.log(activityCounts); // debugging
+	console.log(activityDistances); // debugging
 
 	// Modify the html to display different types
 	document.getElementById("numberActivities").innerText = Object.keys(activityCounts).length;
@@ -32,6 +49,8 @@ function parseTweets(runkeeper_tweets) {
 	document.getElementById("firstMost").innerText = top3[0][0];
 	document.getElementById("secondMost").innerText = top3[1][0];
 	document.getElementById("thirdMost").innerText = top3[2][0];
+
+	// Find the averages
 
 	activity_vis_spec = {
 	  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
