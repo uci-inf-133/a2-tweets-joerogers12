@@ -35,8 +35,6 @@ function parseTweets(runkeeper_tweets) {
 			}
 		}
 	});
-	console.log(activityCounts); // debugging
-	console.log(activityDistances); // debugging
 
 	// Modify the html to display different types
 	document.getElementById("numberActivities").innerText = Object.keys(activityCounts).length;
@@ -80,8 +78,6 @@ function parseTweets(runkeeper_tweets) {
 	// Compute averages
 	const avgWeekend = weekDistances["weekend"].sum / weekDistances["weekend"].count;
 	const avgWeekday = weekDistances["weekday"].sum / weekDistances["weekday"].count;
-
-	console.log(weekDistances); // debugging
 
 	// Modify the html to show which days had longer distances
 	document.getElementById("weekdayOrWeekendLonger").innerText = avgWeekend > avgWeekday ? "Weekends" : "Weekdays";

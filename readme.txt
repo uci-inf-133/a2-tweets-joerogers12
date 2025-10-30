@@ -25,4 +25,4 @@
   
 5. Is there anything special we need to know in order to run your code?
 
-  I'm not sure if it's just my machine but first loading the search page takes a while (~30 seconds) but then it functions properly.
+  None
