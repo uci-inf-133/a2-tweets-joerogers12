@@ -10,6 +10,16 @@ function parseTweets(runkeeper_tweets) {
 	});
 
 	//TODO: create a new array or manipulate tweet_array to create a graph of the number of tweets containing each type of activity.
+	// Add the different activity types and their counts to an object
+	const activityCounts = {};
+	tweet_array.forEach(tweet => {
+		const type = tweet.activityType;
+		if (type && type !== "unknown") {
+			activityCounts[type] = (activityCounts[type] || 0) + 1;
+		}
+	});
+
+	
 
 	activity_vis_spec = {
 	  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
