@@ -73,42 +73,25 @@ class Tweet {
             return "unknown";
         }
         // parse the activity type from the text of the tweet
-        // Find the word after 'mi' or 'km'
         const tweet = this.text;
 
-        let i = 0;
-        while (
-            (tweet[i] !== ' ' && tweet[i + 1] !== 'm' && tweet[i + 2] !== 'i' && tweet[i + 3] !== ' ')
-         || (tweet[i] !== ' ' && tweet[i + 1] !== 'k' && tweet[i + 2] !== 'm' && tweet[i + 3] !== ' ')
-        ) {
-            i++;    
-        }
-        i = i + 4;
+        // Find the word after 'mi' or 'km', this is the activity per the tweet structure
+        const match = tweet.match(/(?:mi|km)\s+(\w+)/i);
 
-        let activity:string = "";
+        if (!match) return "other";
 
-        // Not a distance activity 
-        if (i > tweet.length) {
-            return "other";
-        }
-
-        while (tweet[i] !== ' ') {
-            activity += tweet[i];
-            i++;
-        }
-
-        return activity;
+        return match[1].toLowerCase();
     }
 
     get distance():number {
         if(this.source != 'completed_event') {
             return 0;
         }
-        // prase the distance from the text of the tweet
+        // Extract the distance from the text of the tweet
         const tweet = this.text;
 
         let i = 0;
-        // Use regular expression to find first number
+        // Use regular expression to find first number which is the beginning of distance
         while (!/^\d$/.test(tweet[i])) {
             i++;
         }
@@ -127,11 +110,14 @@ class Tweet {
             i++;
         }
 
+        const distanceNum:number = Number(distance);
+
+        // Convert km to mi
         if (units === 'km') {
-            return Number(distance) / 1.609;
+            return distanceNum / 1.609;
         }
 
-        return Number(distance);
+        return distanceNum;
     }
 
     getHTMLTableRow(rowNumber:number):string {
